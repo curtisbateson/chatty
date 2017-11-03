@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
@@ -7,7 +8,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: '', // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: 'Anon', // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUserColor: '#639',
+      numUsers: 0,
       messages: []
     }
     this.onPost = this.onPost.bind(this);
@@ -16,13 +19,37 @@ class App extends Component {
 
   componentDidMount() {
     this.socket = new WebSocket('ws://localhost:3001');
+
     this.socket.onopen = (event) => {
       console.log("Connected to server");
+
+      this.onPost({
+        content: 'A new user has joined the Chatty',
+        type: "postNotification"
+      })
     };
+
     this.socket.addEventListener('message', (event) => {
-      this.setState({
-        messages: this.state.messages.concat(JSON.parse(event.data))
-      });
+      const eventData = JSON.parse(event.data);
+      switch (eventData.type) {
+        case 'userNumUpdate': {
+          this.setState({
+            numUsers: eventData.num
+          });
+          break;
+        }
+        case 'userColor': {
+          this.setState({
+            currentUserColor: eventData.color
+          });
+          break;
+        }
+        default: {
+          this.setState({
+            messages: this.state.messages.concat(eventData)
+          });
+        }
+      }
     });
   }
 
@@ -33,14 +60,16 @@ class App extends Component {
   }
 
   onPost(message) {
+    message.color = this.state.currentUserColor;
     this.socket.send(JSON.stringify(message));
   }
 
   render() {
     return (
       <div>
+        <NavBar numUsers={this.state.numUsers} />
         <MessageList messages={this.state.messages} />
-        <ChatBar onNameChange={this.onNameChange} onPost={this.onPost} currentUser={this.state.currentUser} />
+        <ChatBar onNameChange={this.onNameChange} onPost={this.onPost} currentUser={this.state.currentUser} color={this.state.currentUserColor} />
       </div>
     );
   }

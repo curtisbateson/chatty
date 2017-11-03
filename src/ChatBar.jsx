@@ -12,7 +12,16 @@ class ChatBar extends Component {
   }
 
   onNameChange(event) {
-    this.props.onNameChange(event.target.value);
+    if(event.key === "Enter") {
+      event.preventDefault();
+      if(event.target.value !== this.props.currentUser) {
+        this.props.onPost({
+          content: `${this.props.currentUser} has changed their name to ${event.target.value}`,
+          type: "postNotification"
+        });
+        this.props.onNameChange(event.target.value);
+      }
+    }
   }
 
   onInput(event) {
@@ -22,23 +31,25 @@ class ChatBar extends Component {
   }
 
   onPost(event) {
-    event.preventDefault();
-    this.props.onPost({
-      content: this.state.content,
-      username: this.props.currentUser
-    });
-    this.setState({
-      content: ''
-    });
+    if(event.key === "Enter") {
+      event.preventDefault();
+      this.props.onPost({
+        content: this.state.content,
+        type: "postMessage",
+        username: this.props.currentUser ? this.props.currentUser : "Anon"
+      });
+      this.setState({
+        content: ''
+      });
+    }
   }
 
   render() {
     return (
-        <form className="chatbar" onSubmit={this.onPost}>
-            <input className="chatbar-username" placeholder="Your Name (Optional)" value={this.props.currentUser.name} onChange={this.onNameChange} />
-            <input className="chatbar-message" placeholder="Type a message and hit ENTER" value={this.state.content} onChange={this.onInput} />
-            <input type="submit" />
-        </form>
+        <footer className="chatbar">
+            <input className="chatbar-username" placeholder="Your Name (Optional)" value={this.props.currentUser.name} onKeyDown={this.onNameChange} />
+            <input className="chatbar-message" placeholder="Type a message and hit ENTER" value={this.state.content} onChange={this.onInput} onKeyDown={this.onPost} />
+        </footer>
     );
   }
 }
