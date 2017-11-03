@@ -3,8 +3,11 @@ import React, {Component} from 'react';
 import Message from './Message.jsx';
 import Notification from './Notification.jsx';
 
+// Component describing a list of both system notifications and user messages
 class MessageList extends Component {
   render() {
+
+    // Attach the appropriate type of message to the list
     const messages = this.props.messages.map((message) => {
         switch (message.type) {
         case 'incomingMessage':
@@ -16,13 +19,13 @@ class MessageList extends Component {
         default:
         return <Notification key={message.id} message='Unknown Message Type' />;
         break;
-        }
+      }
     });
 
     return (
-        <main className='messages'>
-            {messages}
-        </main>
+      <main className='messages'>
+        {messages}
+      </main>
     );
   }
 }

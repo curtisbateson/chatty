@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+// Component describing a chat bar that allows for username and message entry
 class ChatBar extends Component {
   constructor(props) {
     super(props);
@@ -11,9 +12,14 @@ class ChatBar extends Component {
     this.onPost = this.onPost.bind(this);
   }
 
+  // Function to handle username changes
   onNameChange(event) {
+
+    // Name is changed when the field loses focus or if the user presses 'Enter'
     if(event.type === 'blur' || event.key === 'Enter') {
       event.preventDefault();
+
+      // Only update the username if it has been changed
       if(event.target.value !== this.props.currentUser) {
         this.props.onPost({
           content: `${this.props.currentUser} has changed their name to ${event.target.value}`,
@@ -24,18 +30,21 @@ class ChatBar extends Component {
     }
   }
 
+  // Function to update the message text as it is entered
   onInput(event) {
     this.setState({
       content: event.target.value
     });
   }
 
+  // Function to submit a message to the server
   onPost(event) {
     if(event.key === "Enter") {
       event.preventDefault();
       this.props.onPost({
         content: this.state.content,
         type: "postMessage",
+        // Set username to 'Anon' if none has been entered so far
         username: this.props.currentUser ? this.props.currentUser : "Anon"
       });
       this.setState({

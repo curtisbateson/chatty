@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+// Component describing a navigation bar that displays the current number of users that are connected
 class NavBar extends Component {
   render() {
     return (

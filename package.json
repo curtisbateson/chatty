@@ -1,33 +1,14 @@
 {
-  "name": "react-simple-boilerplate",
+  "name": "chatty-client",
   "version": "1.0.0",
-  "description": "Simple and lightweight Boilerplate for ReactJS projects",
+  "description": "Client for Chatty App",
   "scripts": {
     "lint": "eslint --ext .jsx,.js src",
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/noahlotzer/react-simple-boilerplate.git"
-  },
-  "keywords": [
-    "react",
-    "reactjs",
-    "boilerplate",
-    "reload",
-    "live",
-    "edit",
-    "webpack"
-  ],
-  "author": "Noah-Jerome Lotzer <n.lotzer@neusta.de>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/noahlotzer/react-simple-boilerplate/issues"
-  },
-  "homepage": "https://github.com/noahlotzer/react-simple-boilerplate",
-  "engines": {
-    "node": ">=6.0.0"
-  },
+  "keywords": ["chat", "client"],
+  "author": "Curtis Bateson",
+  "license": "ISC",
   "devDependencies": {
     "babel-core": "6.23.1",
     "babel-loader": "6.3.1",

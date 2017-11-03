@@ -4,12 +4,13 @@ import NavBar from './NavBar.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
+// Main App component
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       currentUser: 'Anon', // optional. if currentUser is not defined, it means the user is Anonymous
-      currentUserColor: '#639',
+      currentUserColor: '#639', // default colour for username
       numUsers: 0,
       messages: []
     }
@@ -31,6 +32,8 @@ class App extends Component {
 
     this.socket.addEventListener('message', (event) => {
       const eventData = JSON.parse(event.data);
+
+      // Check message types to handle messages that should not be added to the display
       switch (eventData.type) {
         case 'userNumUpdate': {
           this.setState({
@@ -44,6 +47,7 @@ class App extends Component {
           });
           break;
         }
+        // Add messages to the display if they aren't used for updating user count or username colours
         default: {
           this.setState({
             messages: this.state.messages.concat(eventData)
@@ -53,12 +57,14 @@ class App extends Component {
     });
   }
 
+  // Function to update username
   onNameChange(name) {
     this.setState({
       currentUser: name
     });
   }
 
+  // Function to send messages to the server
   onPost(message) {
     message.color = this.state.currentUserColor;
     this.socket.send(JSON.stringify(message));
