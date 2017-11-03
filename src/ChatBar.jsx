@@ -12,7 +12,7 @@ class ChatBar extends Component {
   }
 
   onNameChange(event) {
-    if(event.key === "Enter") {
+    if(event.type === 'blur' || event.key === 'Enter') {
       event.preventDefault();
       if(event.target.value !== this.props.currentUser) {
         this.props.onPost({
@@ -47,7 +47,7 @@ class ChatBar extends Component {
   render() {
     return (
         <footer className="chatbar">
-            <input className="chatbar-username" placeholder="Your Name (Optional)" value={this.props.currentUser.name} onKeyDown={this.onNameChange} />
+            <input className="chatbar-username" placeholder="Your Name (Optional)" value={this.props.currentUser.name} onBlur={this.onNameChange} onKeyDown={this.onNameChange} />
             <input className="chatbar-message" placeholder="Type a message and hit ENTER" value={this.state.content} onChange={this.onInput} onKeyDown={this.onPost} />
         </footer>
     );
